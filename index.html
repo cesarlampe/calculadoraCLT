@@ -1,200 +1,310 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadoras Financeiras</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Calculadoras de Custo de Funcionário</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      background: #f5f6fa;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    h1 {
-      color: #0077cc;
-    }
-    /* Estilo das abas */
-    .tabs {
-      display: flex;
-      border-bottom: 2px solid #ccc;
-      margin-bottom: 20px;
-    }
-    .tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      background: #e0e0e0;
-      border: 1px solid #ccc;
-      border-bottom: none;
-    }
-    .tab.active {
-      background: #fff;
-      font-weight: bold;
-      border-top: 3px solid #0077cc;
-    }
-    .tab-content {
-      display: none;
-      background: #fff;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 0 0 8px 8px;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      width: 100%;
-      background: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #005fa3;
-    }
-    .resultado {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f9f9f9;
-      border-left: 4px solid #0077cc;
-    }
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{margin:0;background:#f6f8fa;color:#111}
+    header{background:#0b5cff;color:#fff;padding:18px 24px}
+    .container{max-width:1100px;margin:20px auto;padding:18px;background:#fff;border-radius:10px;box-shadow:0 6px 20px rgba(10,20,40,0.06)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .tab{padding:10px 14px;border-radius:8px;cursor:pointer;background:#eef3ff;color:#0b5cff;font-weight:600}
+    .tab.active{background:#0b5cff;color:#fff}
+    .panel{display:none}
+    .panel.active{display:block}
+    label{display:block;margin-top:10px;font-size:14px}
+    input[type=number], input[type=text], select{width:260px;padding:8px;border-radius:6px;border:1px solid #d7dbe0}
+    .row{display:flex;gap:18px;flex-wrap:wrap}
+    .card{padding:14px;border-radius:8px;background:#fafbff;border:1px solid #eef2ff;margin-top:10px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:#0b5cff;color:#fff;border:none;cursor:pointer;margin-top:12px}
+    .result{margin-top:12px;padding:12px;background:#f4f7ff;border-radius:8px;border:1px dashed #dbe8ff}
+    small.note{color:#555;display:block;margin-top:6px}
+    .flex-between{display:flex;justify-content:space-between;align-items:center}
+    footer{margin-top:18px;font-size:13px;color:#666}
+    .preset{margin-top:8px}
+    @media (max-width:720px){input[type=number], input[type=text], select{width:100%}}
   </style>
 </head>
 <body>
+  <header>
+    <div style="max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center">
+      <h1 style="font-size:20px;margin:0">Calculadoras de Custo de Funcionário</h1>
+      <div style="font-size:13px;opacity:.95">Base inicial: fonte de referência sugerida (Contabilizei)</div>
+    </div>
+  </header>
 
-<header>
-  <h1>Calculadoras Financeiras</h1>
-  <p>Ferramentas para pequenas empresas e gestores</p>
-</header>
+  <main class="container">
+    <div class="tabs" role="tablist">
+      <div class="tab active" data-target="salario">Calculadora de Salário Líquido</div>
+      <div class="tab" data-target="simples">Custo (Simples - Exemplo)</div>
+      <div class="tab" data-target="lucro">Custo (Lucro Real/Presumido - Exemplo)</div>
+      <div class="tab" data-target="rescisao">Rescisão</div>
+      <div class="tab" data-target="comparar">Comparar CLT x PJ</div>
+    </div>
 
-<!-- Abas -->
-<div class="tabs">
-  <div class="tab active" onclick="showTab(0)">Custo do Funcionário</div>
-  <div class="tab" onclick="showTab(1)">CLT vs PJ</div>
-  <div class="tab" onclick="showTab(2)">Rescisão CLT</div>
-</div>
+    <!-- SALARIO LIQUIDO -->
+    <section id="salario" class="panel active">
+      <h2>Calculadora de Salário Líquido</h2>
+      <div class="row">
+        <div>
+          <label>Salário bruto (R$)</label>
+          <input id="salario_bruto" type="number" step="0.01" value="3500">
 
-<!-- Conteúdo das Abas -->
-<div class="tab-content active">
-  <h2>Quanto custa um funcionário?</h2>
-  <p>Informe o salário bruto para calcular o custo total para a empresa.</p>
+          <label>Descontos obrigatórios - INSS (use % ou valor)</label>
+          <input id="inss_pct" type="number" step="0.01" value="11"> <small class="note">Valor percentual do INSS retido (padrão: 11%). Você pode digitar 0 e usar o campo valor se preferir.</small>
+          <label>IRRF (alíquota efetiva em %)</label>
+          <input id="irrf_pct" type="number" step="0.01" value="7.5"> <small class="note">Alíquota efetiva já descontada após deduções (ex.: dependentes, INSS).</small>
+          <label>Outros descontos fixos (R$)</label>
+          <input id="desc_fixo" type="number" step="0.01" value="0">
 
-  <label for="salario">Salário Bruto (R$)</label>
-  <input type="number" id="salario" step="0.01">
+          <button class="btn" onclick="calcSalario()">Calcular</button>
+        </div>
+        <div style="flex:1">
+          <div class="card">
+            <strong>Resultado</strong>
+            <div id="res_salario" class="result">Preencha os dados e clique em "Calcular".</div>
+            <small class="note">Observação: Esta calculadora usa percentuais informados pelo usuário. Para regras oficiais (tabela progressiva INSS e IRRF), a implementação pode ser atualizada com as bases e faixas atuais.</small>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <button onclick="calcularCustoFuncionario()">Calcular</button>
+    <!-- SIMPLES -->
+    <section id="simples" class="panel">
+      <h2>Cálculo de Custo do Funcionário - Simples (exemplo de parâmetros)</h2>
+      <div class="row">
+        <div style="min-width:320px">
+          <label>Salário base (R$)</label>
+          <input id="salario_simples" type="number" step="0.01" value="3500">
 
-  <div class="resultado" id="resultado-funcionario"></div>
-</div>
+          <label>FGTS (8% padrão)</label>
+          <input id="fgts_simples" type="number" step="0.01" value="8">
 
-<!-- Aba Pró-labore -->
-<div id="prolabore" class="tab-content">
-  <h2>Cálculo de Pró-Labore</h2>
-  <label for="prolabore-salario">Valor do Pró-Labore (R$)</label>
-  <input type="number" id="prolabore-salario" placeholder="Ex: 5000">
+          <label>Encargos patronais (INSS patronal %) - preset</label>
+          <select id="preset_simples" onchange="applyPreset('simples')">
+            <option value="simples_default">Simples - Exemplo (INSS 20% + RAT/terceiros)</option>
+            <option value="custom">Customizar manualmente</option>
+          </select>
 
-  <button class="calc-btn" onclick="calcularProlabore()">Calcular</button>
-  <div id="resultado-prolabore" class="result"></div>
-</div>
+          <div class="preset">
+            <label>INSS patronal (%)</label>
+            <input id="inss_pat_simples" type="number" step="0.01" value="20">
+            <label>Encargos adicionais (%) (RAT/terceiros/etc)</label>
+            <input id="enc_add_simples" type="number" step="0.01" value="8.8">
+          </div>
 
+          <button class="btn" onclick="calcCusto('simples')">Calcular Custo Total</button>
+        </div>
 
-<div class="tab-content">
-  <h2>Rescisão CLT</h2>
-  <p>(em breve)</p>
-</div>
+        <div style="flex:1">
+          <div class="card">
+            <strong>Resultado</strong>
+            <div id="res_simples" class="result">Preencha e calcule.</div>
+            <small class="note">Os percentuais são exemplos. Ajuste conforme a realidade da empresa / regime.</small>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<script>
-  // Controle das abas
-  function showTab(index) {
-    let tabs = document.querySelectorAll('.tab');
-    let contents = document.querySelectorAll('.tab-content');
-    tabs.forEach((tab, i) => {
-      tab.classList.toggle('active', i === index);
-      contents[i].classList.toggle('active', i === index);
-    });
-  }
+    <!-- LUCRO -->
+    <section id="lucro" class="panel">
+      <h2>Cálculo de Custo do Funcionário - Lucro Real/Presumido (exemplo)</h2>
+      <div class="row">
+        <div style="min-width:320px">
+          <label>Salário base (R$)</label>
+          <input id="salario_lucro" type="number" step="0.01" value="3500">
 
-  // Cálculo do custo do funcionário (simplificado)
-  function calcularCustoFuncionario() {
-    let salario = parseFloat(document.getElementById('salario').value) || 0;
+          <label>FGTS (8% padrão)</label>
+          <input id="fgts_lucro" type="number" step="0.01" value="8">
 
-    // Encargos aproximados (% sobre o salário bruto)
-    let inss = salario * 0.20;   // INSS patronal (20%)
-    let fgts = salario * 0.08;   // FGTS (8%)
-    let outros = salario * 0.05; // Outros custos médios (5%)
+          <label>INSS patronal (%)</label>
+          <input id="inss_pat_lucro" type="number" step="0.01" value="20">
 
-    let custoTotal = salario + inss + fgts + outros;
+          <label>Outros encargos (%) (ex.: terceiros, terceiros/rat)</label>
+          <input id="enc_add_lucro" type="number" step="0.01" value="8.8">
 
-    document.getElementById('resultado-funcionario').innerHTML = `
-      <strong>Resumo do custo:</strong><br>
-      Salário Bruto: R$ ${salario.toFixed(2)} <br>
-      INSS Patronal (20%): R$ ${inss.toFixed(2)} <br>
-      FGTS (8%): R$ ${fgts.toFixed(2)} <br>
-      Outros encargos (~5%): R$ ${outros.toFixed(2)} <br><br>
-      <strong>Custo Total para a Empresa: R$ ${custoTotal.toFixed(2)}</strong>
-    `;
-  }
+          <button class="btn" onclick="calcCusto('lucro')">Calcular Custo Total</button>
+        </div>
 
+        <div style="flex:1">
+          <div class="card">
+            <strong>Resultado</strong>
+            <div id="res_lucro" class="result">Preencha e calcule.</div>
+            <small class="note">Exibe custo direto do salário + encargos patronais. Não inclui custos indiretos (benefícios, transporte, vale-refeição) que também devem ser considerados.</small>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  // Cálculo de Pró-Labore
-function calcularProlabore() {
-  const salario = parseFloat(document.getElementById('prolabore-salario').value);
-  if (isNaN(salario) || salario <= 0) {
-    document.getElementById('resultado-prolabore').innerHTML = "<p>Insira um valor válido.</p>";
-    return;
-  }
+    <!-- RESCISAO -->
+    <section id="rescisao" class="panel">
+      <h2>Rescisão de Contrato (simples)</h2>
+      <div class="row">
+        <div style="min-width:320px">
+          <label>Salário mensal (R$)</label>
+          <input id="salario_resc" type="number" step="0.01" value="3500">
 
-  // INSS 11% do pró-labore
-  const inss = salario * 0.11;
+          <label>Tempo de serviço (meses)</label>
+          <input id="meses_resc" type="number" value="14">
 
-  // Cálculo simplificado do IR (tabela progressiva 2025 - faixas aproximadas)
-  let ir = 0;
-  if (salario > 4664.68) {
-    ir = (salario * 0.275) - 869.36;
-  } else if (salario > 3751.06) {
-    ir = (salario * 0.225) - 636.13;
-  } else if (salario > 2826.65) {
-    ir = (salario * 0.15) - 354.80;
-  } else if (salario > 2112) {
-    ir = (salario * 0.075) - 158.40;
-  }
+          <label>Motivo da rescisão</label>
+          <select id="motivo_resc">
+            <option value="demissao_sem">Demissão sem justa causa (empregador)</option>
+            <option value="pedido" >Pedido de demissão (empregado)</option>
+            <option value="demissao_justa">Demissão por justa causa</option>
+          </select>
 
-  const liquido = salario - inss - ir;
+          <button class="btn" onclick="calcRescisao()">Calcular</button>
+        </div>
+        <div style="flex:1">
+          <div class="card">
+            <strong>Resultado</strong>
+            <div id="res_rescisao" class="result">Preencha e calcule.</div>
+            <small class="note">Cálculo simplificado: parcelas como aviso, 13º proporcional, férias vencidas e proporcionais + 1/3, multa FGTS (40%) são estimadas conforme a seleção. São necessárias regras formais para casos reais.</small>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  document.getElementById('resultado-prolabore').innerHTML = `
-    <h3>Resultado:</h3>
-    <p>Pró-Labore Bruto: R$ ${salario.toFixed(2)}</p>
-    <p>INSS (11%): R$ ${inss.toFixed(2)}</p>
-    <p>IRPF: R$ ${ir.toFixed(2)}</p>
-    <hr>
-    <p><strong>Valor Líquido: R$ ${liquido.toFixed(2)}</strong></p>
-    <p><em>(Distribuição de lucros: isenta de IR e INSS)</em></p>
-  `;
-}
+    <!-- COMPARAR -->
+    <section id="comparar" class="panel">
+      <h2>Comparador CLT x PJ (estimativa)</h2>
+      <div class="row">
+        <div style="min-width:320px">
+          <label>Salário CLT bruto (R$)</label>
+          <input id="salario_clt_cmp" type="number" step="0.01" value="3500">
 
-</script>
+          <label>Salário/Pedido PJ (valor da nota R$)</label>
+          <input id="valor_pj" type="number" step="0.01" value="6000">
 
+          <label>Impostos/Taxas PJ (%) (ISS/IRPJ/CSLL/Simples...)</label>
+          <input id="tax_pj" type="number" step="0.01" value="14">
+
+          <label>Despesas fixas PJ (R$)</label>
+          <input id="desp_pj" type="number" step="0.01" value="400">
+
+          <button class="btn" onclick="calcComparar()">Comparar</button>
+        </div>
+        <div style="flex:1">
+          <div class="card">
+            <strong>Resultado</strong>
+            <div id="res_comparar" class="result">Preencha e calcule.</div>
+            <small class="note">Modelo simples: PJ líquido = nota - impostos - despesas; CLT líquido usa a calculadora de salário. Ajuste impostos conforme o enquadramento real.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Precisa que eu ajuste as fórmulas para um caso real (ex.: tabela INSS 2025, alíquotas do Simples da sua faixa)? Posso adaptar os presets às alíquotas oficiais.</footer>
+  </main>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click',()=>{
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.target).classList.add('active');
+      })
+    })
+
+    function fmt(v){return Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+    // SALARIO
+    function calcSalario(){
+      const bruto = Number(document.getElementById('salario_bruto').value)||0;
+      const inss_pct = Number(document.getElementById('inss_pct').value)||0;
+      const irrf_pct = Number(document.getElementById('irrf_pct').value)||0;
+      const desc_fixo = Number(document.getElementById('desc_fixo').value)||0;
+
+      const inss_val = (inss_pct>0) ? bruto*inss_pct/100 : 0;
+      const irrf_val = bruto*(irrf_pct/100);
+      const liquido = bruto - inss_val - irrf_val - desc_fixo;
+
+      document.getElementById('res_salario').innerHTML = `Salário bruto: R$ ${fmt(bruto)}<br>INSS: R$ ${fmt(inss_val)} (${inss_pct}%)<br>IRRF estimado: R$ ${fmt(irrf_val)} (${irrf_pct}%)<br>Outros descontos: R$ ${fmt(desc_fixo)}<br><strong>Salário líquido estimado: R$ ${fmt(liquido)}</strong>`;
+    }
+
+    // Preset apply
+    function applyPreset(kind){
+      if(kind==='simples'){
+        const val = document.getElementById('preset_simples').value;
+        if(val==='simples_default'){
+          document.getElementById('inss_pat_simples').value = 20;
+          document.getElementById('enc_add_simples').value = 8.8;
+        }
+      }
+    }
+
+    // CUSTO
+    function calcCusto(kind){
+      if(kind==='simples'){
+        const salario = Number(document.getElementById('salario_simples').value)||0;
+        const fgts_pct = Number(document.getElementById('fgts_simples').value)||0;
+        const inss_pat = Number(document.getElementById('inss_pat_simples').value)||0;
+        const enc_add = Number(document.getElementById('enc_add_simples').value)||0;
+        const fgts = salario * fgts_pct/100;
+        const inss = salario * inss_pat/100;
+        const outros = salario * enc_add/100;
+        const custo_total = salario + fgts + inss + outros;
+        document.getElementById('res_simples').innerHTML = `Salário: R$ ${fmt(salario)}<br>FGTS (${fgts_pct}%): R$ ${fmt(fgts)}<br>INSS patronal (${inss_pat}%): R$ ${fmt(inss)}<br>Outros encargos (${enc_add}%): R$ ${fmt(outros)}<br><strong>Custo empregador estimado: R$ ${fmt(custo_total)}</strong>`;
+      } else if(kind==='lucro'){
+        const salario = Number(document.getElementById('salario_lucro').value)||0;
+        const fgts_pct = Number(document.getElementById('fgts_lucro').value)||0;
+        const inss_pat = Number(document.getElementById('inss_pat_lucro').value)||0;
+        const enc_add = Number(document.getElementById('enc_add_lucro').value)||0;
+        const fgts = salario * fgts_pct/100;
+        const inss = salario * inss_pat/100;
+        const outros = salario * enc_add/100;
+        const custo_total = salario + fgts + inss + outros;
+        document.getElementById('res_lucro').innerHTML = `Salário: R$ ${fmt(salario)}<br>FGTS (${fgts_pct}%): R$ ${fmt(fgts)}<br>INSS patronal (${inss_pat}%): R$ ${fmt(inss)}<br>Outros encargos (${enc_add}%): R$ ${fmt(outros)}<br><strong>Custo empregador estimado: R$ ${fmt(custo_total)}</strong>`;
+      }
+    }
+
+    // RESCISAO
+    function calcRescisao(){
+      const salario = Number(document.getElementById('salario_resc').value)||0;
+      const meses = Number(document.getElementById('meses_resc').value)||0;
+      const motivo = document.getElementById('motivo_resc').value;
+
+      // Provisões simples
+      const decimo_proporcional = salario * ((meses%12)/12);
+      const ferias_proporcionais = salario * ((meses%12)/12);
+      const terco_ferias = ferias_proporcionais/3;
+      const aviso = (motivo==='demissao_sem') ? salario : (motivo==='pedido' ? 0 : 0);
+      const multa_fgts = (motivo==='demissao_sem') ? (salario*0.08*0.4*meses/meses) : 0; // simplificado: 40% sobre FGTS do mês (exemplo)
+
+      const total = decimo_proporcional + ferias_proporcionais + terco_ferias + aviso + multa_fgts;
+
+      document.getElementById('res_rescisao').innerHTML = `13º proporcional (estimado): R$ ${fmt(decimo_proporcional)}<br>Férias proporcionais: R$ ${fmt(ferias_proporcionais)}<br>1/3 sobre férias: R$ ${fmt(terco_ferias)}<br>Aviso (estimado): R$ ${fmt(aviso)}<br>Multa FGTS (estimada): R$ ${fmt(multa_fgts)}<br><strong>Total estimado a pagar: R$ ${fmt(total)}</strong>`;
+    }
+
+    // COMPARAR
+    function calcComparar(){
+      const salario_clt = Number(document.getElementById('salario_clt_cmp').value)||0;
+      const valor_pj = Number(document.getElementById('valor_pj').value)||0;
+      const tax_pj = Number(document.getElementById('tax_pj').value)||0;
+      const desp_pj = Number(document.getElementById('desp_pj').value)||0;
+
+      // CLT liquido - use salario liquido calculator defaults (recalculate using saved fields)
+      // Here we approximate: use 11% INSS + 7.5% IRRF (same defaults as salario tab)
+      const inss_pct = Number(document.getElementById('inss_pct').value)||11;
+      const irrf_pct = Number(document.getElementById('irrf_pct').value)||7.5;
+      const inss_val = salario_clt * inss_pct/100;
+      const irrf_val = salario_clt * irrf_pct/100;
+      const clt_liquido = salario_clt - inss_val - irrf_val;
+
+      // PJ: líquido após impostos e despesas
+      const impostos_pj = valor_pj * tax_pj/100;
+      const pj_liquido = valor_pj - impostos_pj - desp_pj;
+
+      document.getElementById('res_comparar').innerHTML = `CLT - Salário bruto: R$ ${fmt(salario_clt)}<br>CLT - Líquido estimado: R$ ${fmt(clt_liquido)}<br>---<br>PJ - Nota: R$ ${fmt(valor_pj)}<br>PJ - Impostos (${tax_pj}%): R$ ${fmt(impostos_pj)}<br>PJ - Despesas: R$ ${fmt(desp_pj)}<br><strong>PJ - Líquido estimado: R$ ${fmt(pj_liquido)}</strong>`;
+    }
+
+    // Initialize with defaults
+    calcSalario();
+  </script>
 </body>
 </html>
