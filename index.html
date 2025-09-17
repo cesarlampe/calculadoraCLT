@@ -109,10 +109,16 @@
   <div class="resultado" id="resultado-funcionario"></div>
 </div>
 
-<div class="tab-content">
-  <h2>CLT vs PJ</h2>
-  <p>(em breve)</p>
+<!-- Aba Pró-labore -->
+<div id="prolabore" class="tab-content">
+  <h2>Cálculo de Pró-Labore</h2>
+  <label for="prolabore-salario">Valor do Pró-Labore (R$)</label>
+  <input type="number" id="prolabore-salario" placeholder="Ex: 5000">
+
+  <button class="calc-btn" onclick="calcularProlabore()">Calcular</button>
+  <div id="resultado-prolabore" class="result"></div>
 </div>
+
 
 <div class="tab-content">
   <h2>Rescisão CLT</h2>
@@ -150,6 +156,44 @@
       <strong>Custo Total para a Empresa: R$ ${custoTotal.toFixed(2)}</strong>
     `;
   }
+
+
+  // Cálculo de Pró-Labore
+function calcularProlabore() {
+  const salario = parseFloat(document.getElementById('prolabore-salario').value);
+  if (isNaN(salario) || salario <= 0) {
+    document.getElementById('resultado-prolabore').innerHTML = "<p>Insira um valor válido.</p>";
+    return;
+  }
+
+  // INSS 11% do pró-labore
+  const inss = salario * 0.11;
+
+  // Cálculo simplificado do IR (tabela progressiva 2025 - faixas aproximadas)
+  let ir = 0;
+  if (salario > 4664.68) {
+    ir = (salario * 0.275) - 869.36;
+  } else if (salario > 3751.06) {
+    ir = (salario * 0.225) - 636.13;
+  } else if (salario > 2826.65) {
+    ir = (salario * 0.15) - 354.80;
+  } else if (salario > 2112) {
+    ir = (salario * 0.075) - 158.40;
+  }
+
+  const liquido = salario - inss - ir;
+
+  document.getElementById('resultado-prolabore').innerHTML = `
+    <h3>Resultado:</h3>
+    <p>Pró-Labore Bruto: R$ ${salario.toFixed(2)}</p>
+    <p>INSS (11%): R$ ${inss.toFixed(2)}</p>
+    <p>IRPF: R$ ${ir.toFixed(2)}</p>
+    <hr>
+    <p><strong>Valor Líquido: R$ ${liquido.toFixed(2)}</strong></p>
+    <p><em>(Distribuição de lucros: isenta de IR e INSS)</em></p>
+  `;
+}
+
 </script>
 
 </body>
