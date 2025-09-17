@@ -1,70 +1,55 @@
-body {
-  font-family: Arial, sans-serif;
-  max-width: 650px;
-  margin: auto;
-  padding: 20px;
-  background: #f5f6fa;
-}
+</head>
+<body>
 
-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
+<header>
+    <h1>Calculadoras Financeiras</h1>
+    <nav>
+        <a href="#calc-clt-pj">CLT vs PJ</a>
+        <a href="#calc-custo-clt">Custo Real CLT</a>
+    </nav>
+</header>
 
-h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #0077cc;
-}
+<main>
+    <section id="calc-clt-pj">
+        <h2>Calculadora CLT vs PJ</h2>
+        <label for="salario1">Salário CLT bruto (R$)</label>
+        <input type="number" id="salario1" step="0.01">
 
-.calc-container {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+        <label for="beneficios1">Benefícios mensais (R$)</label>
+        <input type="number" id="beneficios1" step="0.01">
 
-label {
-  display: block;
-  margin-top: 12px;
-  font-weight: bold;
-}
+        <label for="inss1">INSS da empresa (%)</label>
+        <input type="number" id="inss1" value="20" step="0.01">
 
-input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+        <label for="fgts1">FGTS (%)</label>
+        <input type="number" id="fgts1" value="8" step="0.01">
 
-button {
-  margin-top: 15px;
-  padding: 10px;
-  width: 100%;
-  background: #0077cc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
+        <label for="pj1">Valor mensal PJ contratado (R$)</label>
+        <input type="number" id="pj1" step="0.01">
 
-button:hover {
-  background: #005fa3;
-}
+        <button onclick="calcularCLTPJ()">Calcular</button>
+        <div class="resultado" id="resultado1"></div>
+    </section>
 
-.resultado {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 5px;
-  border-left: 4px solid #0077cc;
-}
+    <section id="calc-custo-clt">
+        <h2>Calculadora de Custo Real CLT</h2>
+        <label for="salario2">Salário CLT bruto (R$)</label>
+        <input type="number" id="salario2" step="0.01">
 
-footer {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 0.9rem;
-  color: #555;
-}
+        <label for="beneficios2">Benefícios mensais (R$)</label>
+        <input type="number" id="beneficios2" step="0.01">
+
+        <label for="inss2">INSS da empresa (%)</label>
+        <input type="number" id="inss2" value="20" step="0.01">
+
+        <label for="fgts2">FGTS (%)</label>
+        <input type="number" id="fgts2" value="8" step="0.01">
+
+        <button onclick="calcularCustoCLT()">Calcular</button>
+        <div class="resultado" id="resultado2"></div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2025 Calculadoras Financeiras - Desenvolvido para ajudar pequenas empresas brasileiras</p>
+</footer>
