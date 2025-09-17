@@ -3,138 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadoras Empresariais</title>
+  <title>Calculadoras Financeiras</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 0;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: #f5f6fa;
     }
     header {
-      background: #2c3e50;
-      color: white;
       text-align: center;
-      padding: 1rem;
+      margin-bottom: 20px;
     }
+    h1 {
+      color: #0077cc;
+    }
+    /* Estilo das abas */
     .tabs {
       display: flex;
-      background: #34495e;
+      border-bottom: 2px solid #ccc;
+      margin-bottom: 20px;
     }
-    .tabs button {
+    .tab {
       flex: 1;
-      padding: 1rem;
-      border: none;
-      background: #34495e;
-      color: white;
+      padding: 12px;
+      text-align: center;
       cursor: pointer;
+      background: #e0e0e0;
+      border: 1px solid #ccc;
+      border-bottom: none;
     }
-    .tabs button.active {
-      background: #1abc9c;
+    .tab.active {
+      background: #fff;
+      font-weight: bold;
+      border-top: 3px solid #0077cc;
     }
     .tab-content {
       display: none;
-      padding: 2rem;
-      background: white;
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 0 0 8px 8px;
     }
     .tab-content.active {
       display: block;
     }
     label {
       display: block;
-      margin: 0.5rem 0 0.2rem;
+      margin-top: 12px;
+      font-weight: bold;
     }
     input {
       width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
-    button.calc-btn {
-      background: #1abc9c;
-      border: none;
-      padding: 0.7rem 1.5rem;
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #0077cc;
       color: white;
+      border: none;
+      border-radius: 4px;
       cursor: pointer;
-      border-radius: 5px;
     }
-    .result {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #ecf0f1;
-      border-left: 4px solid #1abc9c;
+    button:hover {
+      background: #005fa3;
+    }
+    .resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-left: 4px solid #0077cc;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Calculadoras Empresariais</h1>
-    <p>Simule custos de contratação e gestão</p>
-  </header>
 
-  <div class="tabs">
-    <button class="tab-link active" onclick="openTab(event, 'clt')">Custo CLT</button>
-    <button class="tab-link" onclick="openTab(event, 'prolabore')">Pró-Labore</button>
-    <button class="tab-link" onclick="openTab(event, 'pj')">CLT vs PJ</button>
-  </div>
+<header>
+  <h1>Calculadoras Financeiras</h1>
+  <p>Ferramentas para pequenas empresas e gestores</p>
+</header>
 
-  <!-- Aba CLT -->
-  <div id="clt" class="tab-content active">
-    <h2>Custo de um Funcionário (CLT)</h2>
-    <label for="salario">Salário Bruto (R$)</label>
-    <input type="number" id="salario" placeholder="Ex: 5000">
+<!-- Abas -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab(0)">Custo do Funcionário</div>
+  <div class="tab" onclick="showTab(1)">CLT vs PJ</div>
+  <div class="tab" onclick="showTab(2)">Rescisão CLT</div>
+</div>
 
-    <button class="calc-btn" onclick="calcularCLT()">Calcular</button>
-    <div id="resultado-clt" class="result"></div>
-  </div>
+<!-- Conteúdo das Abas -->
+<div class="tab-content active">
+  <h2>Quanto custa um funcionário?</h2>
+  <p>Informe o salário bruto para calcular o custo total para a empresa.</p>
 
-  <!-- Aba Pró-labore -->
-  <div id="prolabore" class="tab-content">
-    <h2>Cálculo de Pró-Labore</h2>
-    <p>(Em breve...)</p>
-  </div>
+  <label for="salario">Salário Bruto (R$)</label>
+  <input type="number" id="salario" step="0.01">
 
-  <!-- Aba CLT vs PJ -->
-  <div id="pj" class="tab-content">
-    <h2>Comparação CLT vs PJ</h2>
-    <p>(Em breve...)</p>
-  </div>
+  <button onclick="calcularCustoFuncionario()">Calcular</button>
 
-  <script>
-    // Alternar abas
-    function openTab(evt, tabId) {
-      const contents = document.querySelectorAll('.tab-content');
-      const links = document.querySelectorAll('.tab-link');
-      contents.forEach(c => c.classList.remove('active'));
-      links.forEach(l => l.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      evt.currentTarget.classList.add('active');
-    }
+  <div class="resultado" id="resultado-funcionario"></div>
+</div>
 
-    // Cálculo custo CLT
-    function calcularCLT() {
-      const salario = parseFloat(document.getElementById('salario').value);
-      if (isNaN(salario) || salario <= 0) {
-        document.getElementById('resultado-clt').innerHTML = "<p>Insira um salário válido.</p>";
-        return;
-      }
+<div class="tab-content">
+  <h2>CLT vs PJ</h2>
+  <p>(em breve)</p>
+</div>
 
-      // Percentuais médios aproximados
-      const inss = salario * 0.20;     // 20% INSS patronal
-      const fgts = salario * 0.08;     // 8% FGTS
-      const outros = salario * 0.05;   // férias + 13º + provisões (simplificado)
+<div class="tab-content">
+  <h2>Rescisão CLT</h2>
+  <p>(em breve)</p>
+</div>
 
-      const custoTotal = salario + inss + fgts + outros;
+<script>
+  // Controle das abas
+  function showTab(index) {
+    let tabs = document.querySelectorAll('.tab');
+    let contents = document.querySelectorAll('.tab-content');
+    tabs.forEach((tab, i) => {
+      tab.classList.toggle('active', i === index);
+      contents[i].classList.toggle('active', i === index);
+    });
+  }
 
-      document.getElementById('resultado-clt').innerHTML = `
-        <h3>Resultado:</h3>
-        <p>Salário Bruto: R$ ${salario.toFixed(2)}</p>
-        <p>INSS Patronal (20%): R$ ${inss.toFixed(2)}</p>
-        <p>FGTS (8%): R$ ${fgts.toFixed(2)}</p>
-        <p>Provisões (férias + 13º): R$ ${outros.toFixed(2)}</p>
-        <hr>
-        <p><strong>Custo Total: R$ ${custoTotal.toFixed(2)}</strong></p>
-      `;
-    }
-  </script>
+  // Cálculo do custo do funcionário (simplificado)
+  function calcularCustoFuncionario() {
+    let salario = parseFloat(document.getElementById('salario').value) || 0;
+
+    // Encargos aproximados (% sobre o salário bruto)
+    let inss = salario * 0.20;   // INSS patronal (20%)
+    let fgts = salario * 0.08;   // FGTS (8%)
+    let outros = salario * 0.05; // Outros custos médios (5%)
+
+    let custoTotal = salario + inss + fgts + outros;
+
+    document.getElementById('resultado-funcionario').innerHTML = `
+      <strong>Resumo do custo:</strong><br>
+      Salário Bruto: R$ ${salario.toFixed(2)} <br>
+      INSS Patronal (20%): R$ ${inss.toFixed(2)} <br>
+      FGTS (8%): R$ ${fgts.toFixed(2)} <br>
+      Outros encargos (~5%): R$ ${outros.toFixed(2)} <br><br>
+      <strong>Custo Total para a Empresa: R$ ${custoTotal.toFixed(2)}</strong>
+    `;
+  }
+</script>
+
 </body>
 </html>
